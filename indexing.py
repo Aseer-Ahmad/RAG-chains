@@ -1,104 +1,20 @@
-import bs4
-from langchain import hub
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.document_loaders import WebBaseLoader
-from langchain_community.vectorstores import Chroma
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from env import setup_env
-import tiktoken
-from langchain_openai import OpenAIEmbeddings
-import numpy as np
+from langchain_community.vectorstores import Chroma
+from helper import load_doc, get_splits
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_community.embeddings.anyscale import AnyscaleEmbeddings
 
 
+#langchain has bunch of indexing, embedding, document loader integrations
 
+def vectorstore_indexing():
 
-# example 
-def example():
-    question = "What kinds of pets do I like?"
-    document = "My favorite pet is a cat."
-
-
-def num_tokens_from_string(string: str, encoding_name: str) -> int:
-    """Returns the number of tokens in a text string."""
-    encoding = tiktoken.get_encoding(encoding_name)
-    num_tokens = len(encoding.encode(string))
-    return num_tokens
-
-def load_doc():
-    # Load Documents example 
-    LINK = "https://lilianweng.github.io/posts/2023-06-23-agent/"
-    
-    loader = WebBaseLoader(
-        web_paths=(LINK,),
-        bs_kwargs=dict(
-            parse_only=bs4.SoupStrainer(
-                class_=("post-content", "post-title", "post-header")
-            )
-        ),
-    )
-
-    docs = loader.load()
-    
-    print(f"docs loaded from {LINK}")
-    print(f"doc character length : {len(str(docs))}")
-    
-
-    return docs
-
-def get_embedding_model():
-    embd = OpenAIEmbeddings()
-    print("loaded embedding model")
-    return embd
-
-def get_embeddings(embd_model, question, document):
-    query_result = embd_model.embed_query(question)
-    document_result = embd_model.embed_query(document)
-
-    print(f"length of query : {len(query_result)}")
-    print(f"length of doc   : {len(document_result)}")
-
-    return query_result, document_result
-
-
-def cosine_similarity(vec1, vec2):
-    dot_product = np.dot(vec1, vec2)
-    norm_vec1 = np.linalg.norm(vec1)
-    norm_vec2 = np.linalg.norm(vec2)
-    sim = dot_product / (norm_vec1 * norm_vec2)
-
-    print(f"cosine similarity score : {sim}")
-
-    return sim
-
-def get_splits(blog_docs, chunk_size, chunk_overlap):
-
-    text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
-                    chunk_size=chunk_size, 
-                    chunk_overlap=chunk_overlap)
-
-    splits = text_splitter.split_documents(blog_docs)
-    print(f"document splitted using RecursiveCharacterTextSplitter with chunk size : {chunk_size} & chunk overlap : {chunk_overlap} ")
-    print(f"total splits : {len(splits)}")
-    print(f"example split :\n{splits[0]}")
-    print(f"example split len : {len(str(splits[0]))}")
-    
-    return splits
-
-def indexing(splits):
-    #using Chroma vector store here for indexing the split embeddings of the documents 
-    vectorstore = Chroma.from_documents(documents=splits, 
-                                    embedding=OpenAIEmbeddings())
-
-    retriever = vectorstore.as_retriever()
-
-    return retriever
-
-
-def main():
     setup_env()
+
     docs = load_doc()
     splits = get_splits(docs, 300, 50)
+    #using Chroma vector store here for indexing doc splits by openAI embeddings 
+    vectorstore = Chroma.from_documents(documents=splits, 
+                                    embedding=OpenAIEmbeddings())
+    return vectorstore
 
-main()
