@@ -13,5 +13,9 @@ def retreive_doc(retriever):
     docs = retriever.get_relevant_documents("What is Task Decomposition?")
     print(f"documents retreived")
     print(docs)
-     
+
     return docs
+
+
+retriever = get_retreiver()
+retreive_doc(retriever)
