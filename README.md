@@ -1,8 +1,11 @@
 # RAG-chains
 
-https://docs.smith.langchain.com/
+Using Generative Language API from Google cloud, langchain API from smith.langchain.com .
+
+RAG steps: 
+============
 
 1. indexing
 2. retreival
-3. generation
-4. Query translation
+3. Query translation
+4. generation
