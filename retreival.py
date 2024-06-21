@@ -2,9 +2,9 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
 from indexing import vectorstore_indexing
 
-def get_retreiver():
+def get_retreiver(kwargs):
     vectorstore = vectorstore_indexing()
-    retriever = vectorstore.as_retriever(search_kwargs={"k": 1})
+    retriever = vectorstore.as_retriever(search_kwargs=kwargs)
 
     return retriever
 
@@ -16,6 +16,5 @@ def retreive_doc(retriever):
 
     return docs
 
-
-retriever = get_retreiver()
-retreive_doc(retriever)
+# retriever = get_retreiver()
+# retreive_doc(retriever)

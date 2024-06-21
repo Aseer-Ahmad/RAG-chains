@@ -15,6 +15,6 @@ def vectorstore_indexing():
     embd = get_embedding_model()
     #using Chroma vector store here for indexing doc splits by openAI embeddings 
     vectorstore = Chroma.from_documents(documents=splits, 
-                                    embedding=embd)
+                                        embedding=embd)
     return vectorstore
 

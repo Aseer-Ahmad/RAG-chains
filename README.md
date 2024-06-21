@@ -1,6 +1,7 @@
 # RAG-chains
 
-Using Generative Language API from Google cloud, langchain API from smith.langchain.com .
+Using Generative Language API from Google cloud, langchain API from smith.langchain.com (my github).
+
 
 RAG steps: 
 ============

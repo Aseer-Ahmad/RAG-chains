@@ -6,5 +6,6 @@ from retreival import get_retreiver
 from helper import get_google_llm
 
 def generate(question):
+    
     rag_chain = create_rag_chain()
     rag_chain.invoke(str(question))
