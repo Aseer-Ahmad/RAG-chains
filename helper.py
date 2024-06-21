@@ -8,6 +8,9 @@ from langchain_community.embeddings.anyscale import AnyscaleEmbeddings
 import numpy as np
 import bs4
 import tiktoken
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_community.embeddings.gpt4all import GPT4AllEmbeddings
+
 
 def num_tokens_from_string(string: str, encoding_name: str) -> int:
     """Returns the number of tokens in a text string."""
@@ -37,9 +40,13 @@ def load_doc():
     return docs
 
 def get_embedding_model():
-    embd = OpenAIEmbeddings()
-    print("loaded embedding model")
-    return embd
+    model_name = "all-MiniLM-L6-v2.gguf2.f16.gguf"
+    gpt4all_kwargs = {'allow_download': 'True'}
+    embeddings = GPT4AllEmbeddings(
+        model_name=model_name,
+        gpt4all_kwargs=gpt4all_kwargs
+    )
+    return embeddings
 
 def get_embeddings(embd_model, question, document):
     query_result = embd_model.embed_query(question)
@@ -49,6 +56,10 @@ def get_embeddings(embd_model, question, document):
     print(f"length of doc   : {len(document_result)}")
 
     return query_result, document_result
+
+def get_google_llm():
+    llm = ChatGoogleGenerativeAI(model="gemini-pro")
+    return llm
 
 
 def cosine_similarity(vec1, vec2):
