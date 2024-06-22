@@ -10,6 +10,7 @@ import bs4
 import tiktoken
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_community.embeddings.gpt4all import GPT4AllEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 
 def num_tokens_from_string(string: str, encoding_name: str) -> int:
@@ -39,7 +40,7 @@ def load_doc():
 
     return docs
 
-def get_embedding_model():
+def getGPT4AllEmbeddings():
     model_name = "all-MiniLM-L6-v2.gguf2.f16.gguf"
     gpt4all_kwargs = {'allow_download': 'True'}
     embeddings = GPT4AllEmbeddings(
@@ -61,6 +62,9 @@ def get_google_llm():
     llm = ChatGoogleGenerativeAI(model="gemini-pro")
     return llm
 
+def getGoogleEmbeddings():
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    return embeddings
 
 def cosine_similarity(vec1, vec2):
     dot_product = np.dot(vec1, vec2)
