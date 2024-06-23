@@ -29,6 +29,7 @@ def getMultiQueryRagChain():
     llm = get_google_llm()
     retriever = get_retreiver({"k": 1})
 
+    print("creating multi query retreival chain")
     generate_queries = (
         prompt_perspectives 
         | llm
@@ -48,6 +49,7 @@ def getMultiQueryRagChain():
     """
 
     prompt = ChatPromptTemplate.from_template(template)
+    print("creating final rag chain")
 
     final_rag_chain = (
         {"context": retrieval_chain, 
@@ -58,4 +60,4 @@ def getMultiQueryRagChain():
     )
 
     # final_rag_chain.invoke({"question":question})
-    return final_rag_chain
+    return final_rag_chain, retrieval_chain

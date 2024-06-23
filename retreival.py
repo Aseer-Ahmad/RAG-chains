@@ -3,6 +3,7 @@ from indexing import vectorstore_indexing
 
 def get_retreiver(kwargs):
     vectorstore = vectorstore_indexing()
+    print("creating retreiver")
     retriever = vectorstore.as_retriever(search_kwargs=kwargs)
 
     return retriever
