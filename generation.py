@@ -11,8 +11,9 @@ from query_transformations import answerindvidually, decomposition, multiquery, 
 def generate():
     
     question = "What is task decomposition for LLM agents?"
+
+    # mutli query 
     ragchain, retrieval_chain = multiquery.getMultiQueryRagChain()
-    
     print("multi query retreival chain invoked")
     retrieval_chain.invoke({"question":question})
     print("final rag chain invoked")
